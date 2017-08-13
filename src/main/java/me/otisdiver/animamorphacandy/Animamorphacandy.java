@@ -2,6 +2,7 @@ package me.otisdiver.animamorphacandy;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 /**
@@ -20,6 +21,9 @@ public class Animamorphacandy extends JavaPlugin {
 		// initialize the config manager, which provides convenience access to
 		// the config... MUST be the first thing run
 		ConfigManager.init(this);
+
+		// initialize protocol manager, which intercepts packets
+		protocolManager = ProtocolLibrary.getProtocolManager();
 
 		// register the FoodListener, which runs logic when a player eats food
 		FoodListener foodListener = new FoodListener(this);
