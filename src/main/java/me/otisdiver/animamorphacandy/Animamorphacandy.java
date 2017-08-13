@@ -1,7 +1,8 @@
 package me.otisdiver.animamorphacandy;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.comphenix.protocol.ProtocolManager;
 
 /**
  * Animamorphacandy is a project that allows server admins to set certain foods
@@ -11,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Animamorphacandy extends JavaPlugin {
 
+	private ProtocolManager protocolManager;
+
 	@Override
 	public void onEnable() {
 
@@ -19,7 +22,8 @@ public class Animamorphacandy extends JavaPlugin {
 		ConfigManager.init(this);
 
 		// register the FoodListener, which runs logic when a player eats food
-		Bukkit.getPluginManager().registerEvents(new FoodListener(), this);
+		FoodListener foodListener = new FoodListener(this);
+		protocolManager.addPacketListener(foodListener);
 	}
 
 }
