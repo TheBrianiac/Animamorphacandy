@@ -1,0 +1,19 @@
+candies:
+    # This name is for your own reference, make it whatever you'd like
+    example:
+        # For valid materials, visit: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html - any non-block should work fine
+        material: COOKED_BEEF
+        # Want to require that the item have a certain name? Set it here, or leave it blank
+        item_name: Cow Candy
+        # Want to require a user have a certain permission? Set it here, or leave it bank
+        permission: candy.cow
+        # Use any valid Lib's Disguise type, list at: https://www.spigotmc.org/wiki/lib-s-disguises-creating-a-disguise/
+        disguise: COW
+        # How long (in seconds) should the player be disguised after eating the candy? Set to -1 for infinite
+        duration: 60
+    add_more_values:
+        material: BLAZE_POWDER
+        item_name:
+        permission: anything.you.want
+        disguise: BLAZE
+        duration: 15
