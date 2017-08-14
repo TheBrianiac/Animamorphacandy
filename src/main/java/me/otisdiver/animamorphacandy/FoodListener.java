@@ -1,6 +1,7 @@
 package me.otisdiver.animamorphacandy;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -32,7 +33,23 @@ public class FoodListener implements PacketListener {
 			Player player = pe.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 
-			// TODO check in config if item is a configured candy
+			for (Candy candy : ConfigManager.getInstance().getCandies()) {
+				// if the item matches, use it
+				if (candy.hasPermission(player) && candy.isItem(item)) {
+					candy.disguise(plugin, player);
+
+					// override the interaction
+					pe.setCancelled(true);
+					// remove the item
+					int amount = item.getAmount();
+					if (amount == 1) {
+						item.setType(Material.AIR);
+					}
+					else {
+						item.setAmount(amount - 1);
+					}
+				}
+			}
 
 			// call an event, stop if it's cancelled
 			AnimamorphEvent event = new AnimamorphEvent(player, item);

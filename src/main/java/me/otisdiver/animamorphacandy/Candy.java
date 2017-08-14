@@ -1,9 +1,15 @@
 package me.otisdiver.animamorphacandy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import net.md_5.bungee.api.ChatColor;
 
 public class Candy {
@@ -11,15 +17,41 @@ public class Candy {
 	private Material material;
 	private String itemName;
 	private String permission;
-	private DisguiseType disguise;
+	private DisguiseType disguiseType;
 	private int duration;
 
-	public Candy(Material material, String itemName, String permission, DisguiseType disguise, int duration) {
+	private MobDisguise disguise;
+
+	public Candy(Material material, String itemName, String permission, DisguiseType disguiseType, int duration) {
 		this.material = material;
 		this.itemName = itemName;
 		this.permission = permission;
-		this.disguise = disguise;
+		this.disguiseType = disguiseType;
 		this.duration = duration;
+	}
+
+	/**
+	 * Activates the Candy's disguise for the player for the configured
+	 * duration.
+	 * 
+	 * @param player who to disguise
+	 */
+	public void disguise(JavaPlugin plugin, Player player) {
+
+		// create & save disguise if not already done
+		if (disguise == null) {
+			disguise = new MobDisguise(disguiseType);
+		}
+
+		// apply disguise
+		DisguiseAPI.disguiseToAll(player, disguise);
+		// in [duration] seconds, remove the disguise
+		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			// if the disguise is still active, remove it
+			Disguise currentDisguise = DisguiseAPI.getDisguise(player);
+			if (currentDisguise != null && currentDisguise.equals(disguise))
+				DisguiseAPI.undisguiseToAll(player);
+		}, duration * 20);
 	}
 
 	public boolean isItem(ItemStack it) {
@@ -38,6 +70,10 @@ public class Candy {
 		return true;
 	}
 
+	public boolean hasPermission(Player player) {
+		return player.hasPermission(permission);
+	}
+
 	public Material getMaterial() {
 		return material;
 	}
@@ -51,7 +87,7 @@ public class Candy {
 	}
 
 	public String getDisguise() {
-		return disguise;
+		return disguiseType;
 	}
 
 	public int getDuration() {
