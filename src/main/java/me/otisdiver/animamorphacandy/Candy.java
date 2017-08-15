@@ -86,7 +86,7 @@ public class Candy {
 		return permission;
 	}
 
-	public String getDisguise() {
+	public DisguiseType getDisguise() {
 		return disguiseType;
 	}
 
