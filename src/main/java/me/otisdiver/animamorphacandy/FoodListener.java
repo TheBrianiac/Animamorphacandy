@@ -36,6 +36,15 @@ public class FoodListener implements PacketListener {
 			for (Candy candy : ConfigManager.getInstance().getCandies()) {
 				// if the item matches, use it
 				if (candy.hasPermission(player) && candy.isItem(item)) {
+
+					// call an event, stop if it's cancelled
+					AnimamorphEvent event = new AnimamorphEvent(player, item);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isCancelled()) {
+						return;
+					}
+
+					// activate the disguise
 					candy.disguise(plugin, player);
 
 					// override the interaction
@@ -49,13 +58,6 @@ public class FoodListener implements PacketListener {
 						item.setAmount(amount - 1);
 					}
 				}
-			}
-
-			// call an event, stop if it's cancelled
-			AnimamorphEvent event = new AnimamorphEvent(player, item);
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled()) {
-				return;
 			}
 		}
 	}
